@@ -1167,16 +1167,24 @@
        <h1 class="singlepagetitle">СБОРНИК ИДЕЙ ДЛЯ ТВОРЧЕСКИХ ЗАНЯТИЙ</h1>
        <div class="prep-sol--main-page_content">
             <section class="prep-sol--mob-filter">
-                <ul class="prep-sol--mob-filter_filter-list prep-sol--filter-list">
-                    <li class="prep-sol--filter-list-item prep-sol--filter-list_item">
-                        <spam class="prep-sol--filter-list-item_name">Лето</spam>
-                        <button class="prep-sol--filter-list-item_remove" title="Удалить фильтр"></button>
-                    </li>
-                </ul>
-                <button class="prep-sol--button prep-sol--mob-filter_button">Фильтр</button>
+                <button class="prep-sol--button prep-sol--mob-filter_button">Фильтры</button>
+                <div class="prep-sol--filter-list_scroll-wrapper">
+                    <div class="prep-sol--filter-list_wrapper">
+                        <ul class="prep-sol--mob-filter_filter-list prep-sol--filter-list">
+                            <li class="prep-sol--filter-list-item prep-sol--filter-list_item">
+                                <spam class="prep-sol--filter-list-item_name">Тема: Лето</spam>
+                                <button class="prep-sol--filter-list-item_remove" title="Удалить фильтр"></button>
+                            </li>
+                            <li class="prep-sol--filter-list-item prep-sol--filter-list_item">
+                                <spam class="prep-sol--filter-list-item_name">Тема: Лето</spam>
+                                <button class="prep-sol--filter-list-item_remove" title="Удалить фильтр"></button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="prep-sol--button prep-sol--mob-filter_clear-button">Сбросить всё</button>
             </section>
             <aside class="prep-sol--filter">
-                <div class="prep-sol--filter_background"></div>
                 <form class="prep-sol--filter_content">
                     <div class="prep-sol--filter-block">
                         <h2 class="prep-sol--filter-block_title">Тема</h2>
@@ -1327,8 +1335,12 @@
                     </div>
                 </form>
                 <button class="prep-sol--filter_close">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0.369194 21.9081C-0.0886239 22.3514 -0.125737 23.1102 0.286298 23.6028C0.698334 24.0954 1.40349 24.1353 1.86131 23.692L12 13.8737L22.1387 23.692C22.5965 24.1353 23.3017 24.0954 23.7137 23.6028C24.1257 23.1102 24.0886 22.3514 23.6308 21.9081L13.3995 12L23.6308 2.09199C24.0886 1.64863 24.1257 0.889887 23.7137 0.397275C23.3017 -0.0953374 22.5965 -0.135271 22.1387 0.308079L12 10.1264L1.86131 0.308058C1.40349 -0.135293 0.698334 -0.0953602 0.286299 0.397253C-0.125737 0.889864 -0.0886237 1.64861 0.369194 2.09196L10.6005 12L0.369194 21.9081Z" fill="white"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+                        <g>
+                            <g>
+                                <path fill="#949494" d="M13.523 2.74L9.277 6.988l4.246 4.246a1.617 1.617 0 0 1-2.286 2.287L6.99 9.274 2.744 13.52a1.61 1.61 0 0 1-1.143.473 1.617 1.617 0 0 1-1.143-2.76l4.246-4.246L.458 2.741A1.617 1.617 0 0 1 2.744.454L6.99 4.701 11.237.454a1.617 1.617 0 0 1 2.286 2.287z"/>
+                            </g>
+                        </g>
                     </svg>
                 </button>
             </aside>
@@ -1681,6 +1693,11 @@
     <script src="https://leonardo.ru/js/lib/jquery.min.js"></script>
     <script>
         $(function(){
+            var filterProperties = {
+                "theme":"Тема",
+                "activity":"Вид деятельности",
+                "age":"Возраст"
+            }
             var scroll = $(".prep-sol--scroll")
             var prefix = ".prep-sol--scroll"
 
@@ -1749,21 +1766,36 @@
 
             filterCloseButton.on("click", function () {
                 filter.removeClass("prep-sol--filter__active")
-                setTimeout(function() {
-                    $("body").css("overflow-y", "")
-                    filter.css("display", "none")
-                }, 300)
+                $("body").css("overflow-y", "")
+                filter.css("display", "none")
             })
 
             var selectedFilters = $(".prep-sol--filter-list-item")
+            var clearFilter = $(".prep-sol--mob-filter_clear-button")
             selectedFilters.each(function(i, e) {
-                var selectedFilter = $(e)
-                var removeBtn = selectedFilters.find("button")
+                var selectedFilter = $(selectedFilters[i])
+                setFilterRemovingFunc(selectedFilter)
+            })
+
+            function setFilterRemovingFunc (filter) {
+                var removeBtn = filter.find("button")
 
                 removeBtn.on("click", function () {
-                    selectedFilters.remove()
+                    selectedFilters = $(".prep-sol--filter-list-item")
+                    filter.remove()
+                    if (selectedFilters.length - 1 == 0) {
+                        clearFilter.css("display", "none")
+                    }
                     updateSolutionsList()
                 })
+            }
+
+            clearFilter.on("click", function(){
+                selectedFilters = $(".prep-sol--filter-list-item")
+                
+                selectedFilters.remove()
+                clearFilter.css("display", "none")
+                updateSolutionsList()
             })
 
             var itemsWrapper = $(".prep-sol--items_wrapper")
@@ -1831,8 +1863,31 @@
             }
         
             var allInputs = filter.find("input")
-            allInputs.on("change input", function(){
+            var filterList = $(".prep-sol--filter-list")
+            allInputs.on("change input", function(e){
+                currentInput = $(e.target)
+                if (currentInput.prop("type") == "checkbox") {
+
+                }
+                else {
+                    var content = filterProperties[currentInput.attr("name")] + ": " + currentInput.parent().find("p").text()
+                    var contentWidth = content.length*7.7+42
+                    filterList.append(
+                        "<li class=\"prep-sol--filter-list-item prep-sol--filter-list_item\" style=\"min-width: "+contentWidth+"px\">"+
+                            "<spam class=\"prep-sol--filter-list-item_name\">"+content+"</spam>"+
+                            "<button class=\"prep-sol--filter-list-item_remove\" title=\"Удалить фильтр\"></button>"+
+                        "</li>"
+                    )
+                    setFilterRemovingFunc(filterList.children().last())
+                    var newListWidth = 0
+                    filterList.find("li").each(function(i,e){
+                        newListWidth += $(e).width() + 30
+                    })
+                    console.log(newListWidth);
+                    filterList.css("width",newListWidth+"px")
+                }
                 updateSolutionsList()
+                clearFilter.css("display", "block")
             })
         })
     </script>
