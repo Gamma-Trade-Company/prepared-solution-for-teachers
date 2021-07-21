@@ -766,6 +766,8 @@ body {
         &_link {
             font-size: 14px;
             color: #2C2C2C;
+            display: flex;
+            align-items: center;
         }
     }
 }
