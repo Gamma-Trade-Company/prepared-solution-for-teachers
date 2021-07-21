@@ -1185,73 +1185,73 @@
                                 <div class="prep-sol--scroll_area">
                                     <input type="hidden" value="[]" name="theme">
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Новый год
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Зима
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Лето
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Осень
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             День Святого Валентина
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             8 марта
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Цветы
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Животные
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Парусники, корабли
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Деревья
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Пейзаж
                                         </p>
                                     </label>
                                     <label class="prep-sol--checkbox">
-                                        <input type="checkbox" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
+                                        <input type="checkbox" data-name="theme" class="prep-sol--checkbox_input prep-sol--theme-checkbox" value="0">
                                         <p class="prep-sol--checkbox_text">
                                             Насекомые
                                         </p>
@@ -1759,7 +1759,7 @@
             filterCloseButton.on("click", function () {
                 filter.removeClass("prep-sol--filter__active")
                 $("body").css("overflow-y", "")
-                filter.css("display", "none")
+                filter.removeAttr("style")
             })
 
             var selectedFilters = $(".prep-sol--filter-list-item")
@@ -1769,16 +1769,23 @@
                 setFilterRemovingFunc(selectedFilter)
             })
 
-            function setFilterRemovingFunc (filter) {
-                var removeBtn = filter.find("button")
+            function setFilterRemovingFunc (selectedFilterBlock) {
+                var removeBtn = selectedFilterBlock.find("button")
 
                 removeBtn.on("click", function () {
                     selectedFilters = $(".prep-sol--filter-list-item")
-                    filter.remove()
+                    filter.find("input[value=-1][name="+selectedFilterBlock.data("property")+"]").click()
+                    var checkboxes = filter.find("input[type=checkbox][data-name="+selectedFilterBlock.data("property")+"]")
+                    checkboxes.each(function(i,e){
+                        e = $(e)
+                        if (e.prop("checked")) {
+                            e.click()
+                        }
+                    })
+                    selectedFilterBlock.remove()
                     if (selectedFilters.length - 1 == 0) {
                         clearFilter.css("display", "none")
                     }
-                    updateSolutionsList()
                 })
             }
 
@@ -1787,7 +1794,14 @@
                 
                 selectedFilters.remove()
                 clearFilter.css("display", "none")
-                updateSolutionsList()
+                filter.find("input[value=-1]").click()
+                var checkboxes = filter.find("input[type=checkbox]")
+                checkboxes.each(function(i,e){
+                    e = $(e)
+                    if (e.prop("checked")) {
+                        e.click()
+                    }
+                })
             })
 
             var itemsWrapper = $(".prep-sol--items_wrapper")
@@ -1804,11 +1818,12 @@
                     }
                     catch {}
 
-                    if(e.value.length != 0 && e.value >= 0) {
+                    if(e.value.length != 0 && e.value !== "" && !(e.value < 0)) {
                         newUrl += e.name + "=" + e.value + "&"
                     }
                 });
                 
+                newUrl = newUrl == "?" ? "/" : newUrl
 
                 window.history.pushState({},document.title,newUrl)
 
@@ -1818,7 +1833,7 @@
                 }, 2000)
             }
 
-            var theme = $("[name=theme]")
+            var theme = filter.find("input[name=theme]")
             multiSelectListener(theme)
 
             function multiSelectListener (element) {
@@ -1828,26 +1843,27 @@
                     checkbox = $(checkbox)
 
                     checkbox.on("change", function () {
-                        if (checkbox[0].checked) {
-                            var value
-                            try{
-                                value = JSON.parse(element.val())
-                            }
-                            catch {
-                                value = []
-                            }
+                        var value
+                        try{
+                            value = JSON.parse(element.val())
+                        }
+                        catch {
+                            value = []
+                        }
+                        if (checkbox.prop("checked")) {
                             value.push(checkbox.val())
                             value = JSON.stringify(value)
-                            value = value == 0 ? [] : value
+                            value = value === 0 ? [] : value
                             element.val(value)
                         }
                         else {
-                            var value = JSON.parse(element.val())
-                            value.forEach(function(e, i){
+                            value.forEach(function(i, e){
                                 if (e == checkbox.val()) {
                                     value.splice(i, 1)
                                 }
                             })
+                            value = JSON.stringify(value)
+                            value = value === 0 ? [] : value
                             element.val(value)
                         }
                     })
@@ -1856,30 +1872,76 @@
         
             var allInputs = filter.find("input")
             var filterList = $(".prep-sol--filter-list")
-            allInputs.on("change input", function(e){
+            allInputs.on("change", function(e){
                 currentInput = $(e.target)
                 if (currentInput.prop("type") == "checkbox") {
-
+                    var propertyName = currentInput.data("name")
+                    var selectedFilterBlock = filterList.find("li[data-property=\""+propertyName+"\"]")
+                    if (currentInput.prop("checked")) {
+                        if (selectedFilterBlock.length > 0) {
+                            var content = selectedFilterBlock.find("span").text() + ", " + currentInput.parent().find("p").text().trim()
+                            var contentWidth = content.length*7.8
+                            selectedFilterBlock.find("span").text(content).css("min-width", contentWidth)
+                        }
+                        else {
+                            var content = filterProperties[propertyName] + ": " + currentInput.parent().find("p").text().trim()
+                            var contentWidth = content.length*7.8
+                            filterList.append(
+                                "<li class=\"prep-sol--filter-list-item prep-sol--filter-list_item\" data-property=\""+propertyName+"\">"+
+                                    "<span class=\"prep-sol--filter-list-item_name\" style=\"min-width: "+contentWidth+"px\">"+content+"</span>"+
+                                    "<button class=\"prep-sol--filter-list-item_remove\" title=\"Удалить фильтр\"></button>"+
+                                "</li>"
+                            )
+                            setFilterRemovingFunc(filterList.children().last())
+                        }
+                    }
+                    else {
+                        if (selectedFilterBlock.length > 0) {
+                            var uncheckedPropertyName = currentInput.parent().find("p").text().trim()
+                            var content = selectedFilterBlock.find("span").text()
+                            content = content.replace(uncheckedPropertyName+", ","")
+                            content = content.replace(uncheckedPropertyName,"")
+                            var contentWidth = content.length*7.8
+                            if (content == "Тема: ") {
+                                selectedFilterBlock.remove()
+                            }
+                            else {
+                                selectedFilterBlock.find("span").text(content).css("min-width", contentWidth)
+                            }
+                        }
+                        else {
+                            selectedFilterBlock.remove()
+                        }
+                    }
                 }
                 else {
-                    var content = filterProperties[currentInput.attr("name")] + ": " + currentInput.parent().find("p").text()
-                    var contentWidth = content.length*7.7+42
-                    filterList.append(
-                        "<li class=\"prep-sol--filter-list-item prep-sol--filter-list_item\" style=\"min-width: "+contentWidth+"px\">"+
-                            "<spam class=\"prep-sol--filter-list-item_name\">"+content+"</spam>"+
-                            "<button class=\"prep-sol--filter-list-item_remove\" title=\"Удалить фильтр\"></button>"+
-                        "</li>"
-                    )
-                    setFilterRemovingFunc(filterList.children().last())
-                    var newListWidth = 0
-                    filterList.find("li").each(function(i,e){
-                        newListWidth += $(e).width() + 30
-                    })
-                    console.log(newListWidth);
-                    filterList.css("width",newListWidth+"px")
+                    var propertyName = currentInput.attr("name")
+                    $("li[data-property=\""+propertyName+"\"]").remove()
+                    if (currentInput.val() != -1) {
+                        var value = currentInput.parent().find("p").text().trim()
+                        var content = filterProperties[propertyName] + ": " + value
+                        var contentWidth = content.length*7.8
+                        filterList.append(
+                            "<li class=\"prep-sol--filter-list-item prep-sol--filter-list_item\" data-property=\""+propertyName+"\">"+
+                                "<span class=\"prep-sol--filter-list-item_name\" style=\"min-width: "+contentWidth+"px\">"+content+"</span>"+
+                                "<button class=\"prep-sol--filter-list-item_remove\" title=\"Удалить фильтр\"></button>"+
+                            "</li>"
+                        )
+                        setFilterRemovingFunc(filterList.children().last())
+                    }
                 }
+                var newListWidth = 0
+                filterList.find("li").each(function(i,e){
+                    newListWidth += $(e).width() + 30
+                })
+                filterList.css("width",newListWidth+"px")
                 updateSolutionsList()
-                clearFilter.css("display", "block")
+                if (filterList.find("li").length > 0) {
+                    clearFilter.css("display", "block")
+                }
+                else {
+                    clearFilter.css("display", "none")
+                }
             })
         })
     </script>
