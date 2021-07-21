@@ -1849,6 +1849,37 @@
                     attachmentsBlock.css("margin-top", 0)
                 }
             })
+        
+            var productCounters = $(prefixClass+"counter")
+            productCounters.each(function(i,e) {
+                e = $(e)
+                var minusBtn = e.find(prefixClass+"counter_minus")
+                var input = e.find(prefixClass+"counter_input")
+                var plusBtn = e.find(prefixClass+"counter_plus")
+
+                minusBtn.on("click", function() {
+                    if (input.val() > 1) input.val(parseInt(input.val()) - 1)
+                })
+
+                plusBtn.on("click", function() {
+                    input.val(parseInt(input.val()) + 1)
+                })
+
+                input.on("keydown", function(e) {
+                    var key = e.originalEvent.key
+                    if("0123456789".indexOf(key) == -1 &&
+                        e.originalEvent.keyCode != 8 &&
+                        e.originalEvent.keyCode != 9 &&
+                        e.originalEvent.keyCode != 37 &&
+                        e.originalEvent.keyCode != 39 &&
+                        e.originalEvent.keyCode != 46) {
+                        e.preventDefault()
+                    }
+                })
+                input.on("input", function() {
+                    if (input.val() == 0 || input.val() == "") input.val(1)
+                })
+            })
         })
     </script>
 </body>
