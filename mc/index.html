@@ -1151,9 +1151,6 @@
         </div>
         
     </header>
-    <!-- <header class="prep-sol--header">
-        <a href="https://leonardo.ru/educational-program/" class="prep-sol--header_link">Назад к странице “Готовые решения для педагогов”</a>
-    </header> -->
     <main class="prep-sol--main-page">
         <div class="row breadcrumbs-row">
             <div class="col-lg-12 breadcrumbs">
@@ -1191,6 +1188,25 @@
                             <div class="prep-sol--property_value">Средний дошкольный</div>
                         </div>
                     </div>
+                    <div class="prep-sol--attachments_wrapper">
+                        <div class="prep-sol--attachments">
+                            <h2 class="prep-sol--attachments_header">
+                                Методические материалы
+                            </h2>
+                            <div class="prep-sol--attachments_item prep-sol--attachment">
+                                <a href="https://leonardo.ru/files/mc_pedagogs/docs/ped_instruction_27.docx" download class="prep-sol--attachment_link" title="Скачать инструкцию по выполнению">
+                                    <img src="../img/docx_img.svg" class="prep-sol--attachment_img" alt="DOCX">
+                                    Инструкция по выполнению
+                                </a>
+                            </div>
+                            <div class="prep-sol--attachments_item prep-sol--attachment">
+                                <a href="https://leonardo.ru/files/mc_pedagogs/docs/ped_konspekt_27.docx" download class="prep-sol--attachment_link" title="Скачать конспект занятия">
+                                    <img src="../img/docx_img.svg" class="prep-sol--attachment_img" alt="DOCX">
+                                    Конспект занятия
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="prep-sol--content">
@@ -1198,7 +1214,7 @@
                     <div class="prep-sol--tab">
                         <div class="prep-sol--tab_header prep-sol--tab-header">
                             <h2 class="prep-sol--tab-header_title">
-                                Необходимые для занятия материалы и оборудование
+                                Инструменты и материалы
                             </h2>
                             <svg class="prep-sol--tab-header_arrow" xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
                                 <path d="M5.5 8.5L11 0.5L0 0.5L5.5 8.5Z" fill="#CACACA"/>
@@ -1385,6 +1401,10 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <button class="prep-sol--buy-all-button prep-sol--button">
+                                    Купить всё
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1556,25 +1576,6 @@
                                 <p>
                                     <em>Молодцы, очень красиво получилось!</em></p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="prep-sol--attachments_wrapper">
-                    <div class="prep-sol--attachments">
-                        <h2 class="prep-sol--attachments_header">
-                            Материалы для занятия
-                        </h2>
-                        <div class="prep-sol--attachments_item prep-sol--attachment">
-                            <a href="https://leonardo.ru/files/mc_pedagogs/docs/ped_instruction_27.docx" download class="prep-sol--attachment_link" title="Скачать инструкцию по выполнению">
-                                <img src="../img/docx_img.svg" class="prep-sol--attachment_img" alt="DOCX">
-                                Инструкция по выполнению
-                            </a>
-                        </div>
-                        <div class="prep-sol--attachments_item prep-sol--attachment">
-                            <a href="https://leonardo.ru/files/mc_pedagogs/docs/ped_konspekt_27.docx" download class="prep-sol--attachment_link" title="Скачать конспект занятия">
-                                <img src="../img/docx_img.svg" class="prep-sol--attachment_img" alt="DOCX">
-                                Конспект занятия
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -1822,32 +1823,6 @@
                         tabSlider.css("max-height", tabSlider.children().height()+31)
                     }
                 })
-            })
-
-            $(document).on("scroll", function(e){
-                var contentBlock = $(prefixClass+"content")
-                var contentBlockTop = contentBlock.offset().top - ($(document).width() > 990 ? 25 : 156)
-                var attachmentsBlock = $(prefixClass+"attachments")
-                var contentBlockBottom = contentBlock.offset().top + contentBlock.height() - attachmentsBlock.height() - 57
-                if ($(document).scrollTop() >= contentBlockTop &&
-                    $(document).width() > 890) {
-                    if ($(document).scrollTop() >= contentBlockBottom - ($(document).width() <= 990 ? $(".header").height() : 0) - 25) {
-                        attachmentsBlock.removeClass(prefix+"attachments__fixed")
-                        if (attachmentsBlock.css("margin-top") == "0px") {
-                            attachmentsBlock.css("margin-top", contentBlockBottom - contentBlock.offset().top)
-                        }
-                    }
-                    else {
-                        if (attachmentsBlock.css("margin-top") != "0px") {
-                            attachmentsBlock.css("margin-top", 0)
-                        }
-                        attachmentsBlock.addClass(prefix+"attachments__fixed")
-                    }
-                }
-                else {
-                    attachmentsBlock.removeClass(prefix+"attachments__fixed")
-                    attachmentsBlock.css("margin-top", 0)
-                }
             })
         
             var productCounters = $(prefixClass+"counter")
