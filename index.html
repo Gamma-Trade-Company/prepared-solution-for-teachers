@@ -1690,60 +1690,67 @@
                 "activity":"Вид деятельности",
                 "age":"Возраст"
             }
-            var scroll = $(".prep-sol--scroll")
-            var prefix = ".prep-sol--scroll"
 
-            scroll.each(function(i, e) {
-                var currentScroll = $(e)
-                var scrollArea = currentScroll.find(prefix+"_area")
-                var scrollBar = currentScroll.find(prefix+"-bar")
-                var scrollBarButton = scrollBar.find(prefix+"-bar_button")
+            function setScrolls () {
+                var scroll = $(".prep-sol--scroll")
+                var prefix = ".prep-sol--scroll"
 
-                var scrollingByBar = false
-                var scrolling = false
-                var mouseDiff = 0
-                
-                if (scrollArea.height() <= currentScroll.height()) {
-                    scrollBar.css("display", "none")
-                }
-                else {
-                    scrollBarButton.height(currentScroll.height() / scrollArea[0].scrollHeight * scrollBar.height())
-                }
+                scroll.each(function(i, e) {
+                    var currentScroll = $(e)
+                    var scrollArea = currentScroll.find(prefix+"_area")
+                    var scrollBar = currentScroll.find(prefix+"-bar")
+                    var scrollBarButton = scrollBar.find(prefix+"-bar_button")
 
-                scrollArea.on("scroll", function(){
-                    if (!scrollingByBar) {
-                        scrollBarButton.css("margin-top", (scrollArea.scrollTop() / scrollArea[0].scrollHeight * scrollBar.height())+"px")
+                    var scrollingByBar = false
+                    var scrolling = false
+                    var mouseDiff = 0
+                    
+                    if (scrollArea.height() < currentScroll.height()) {
+                        scrollBar.css("display", "none")
                     }
-                })
-
-                $("body").on("mousedown", scrollBarButton, function(e){
-                    scrolling = scrollingByBar = true
-                    mouseDiff = e.clientY - scrollBarButton.offset().top
-                })
-
-                $("body").on("mousemove", scrollBarButton, function(e){
-                    if (scrolling) {
-                        var cursorYValue = e.clientY - scrollBar.offset().top - mouseDiff
-                        if (cursorYValue >= 0 && cursorYValue <= scrollBar.height() - scrollBarButton.height()) {
-                            scrollBarButton.css("margin-top", e.clientY - scrollBar.offset().top - mouseDiff + "px")
-                            scrollArea.scrollTop(parseFloat(scrollBarButton.css("margin-top").replace("px", "")) / scrollBar.height() * scrollArea[0].scrollHeight)
-                        }
-                        else if (cursorYValue < 0) {
-                            scrollBarButton.css("margin-top", "0px")
-                            scrollArea.scrollTop(0)
-                        }
-                        else {
-                            scrollBarButton.css("margin-top", (scrollBar.height() - scrollBarButton.height()) + "px")
-                            scrollArea.scrollTop(1000)
-                        }
+                    else {
+                        scrollBarButton.css("height",currentScroll.height() / scrollArea[0].scrollHeight * scrollBar.height())
                     }
-                })
 
-                $("body").on("mouseup", scrollBarButton, function(e){
-                    scrolling = scrollingByBar = false
+                    scrollArea.on("scroll", function(){
+                        if (!scrollingByBar) {
+                            scrollBarButton.css("margin-top", (scrollArea.scrollTop() / scrollArea[0].scrollHeight * scrollBar.height())+"px")
+                        }
+                    })
+
+                    $("body").on("mousedown", scrollBarButton, function(e){
+                        scrolling = scrollingByBar = true
+                        mouseDiff = e.clientY - scrollBarButton.offset().top
+                    })
+
+                    $("body").on("mousemove", scrollBarButton, function(e){
+                        if (scrolling) {
+                            var cursorYValue = e.clientY - scrollBar.offset().top - mouseDiff
+                            if (cursorYValue >= 0 && cursorYValue <= scrollBar.height() - scrollBarButton.height()) {
+                                scrollBarButton.css("margin-top", e.clientY - scrollBar.offset().top - mouseDiff + "px")
+                                scrollArea.scrollTop(parseFloat(scrollBarButton.css("margin-top").replace("px", "")) / scrollBar.height() * scrollArea[0].scrollHeight)
+                            }
+                            else if (cursorYValue < 0) {
+                                scrollBarButton.css("margin-top", "0px")
+                                scrollArea.scrollTop(0)
+                            }
+                            else {
+                                scrollBarButton.css("margin-top", (scrollBar.height() - scrollBarButton.height()) + "px")
+                                scrollArea.scrollTop(1000)
+                            }
+                        }
+                    })
+
+                    $("body").on("mouseup", scrollBarButton, function(e){
+                        scrolling = scrollingByBar = false
+                    })
                 })
-            })
+            }
         
+            if ($(document).width() > 990) {
+                setScrolls()
+            }
+
             var filter = $(".prep-sol--filter")
             var mobFilterButton = $(".prep-sol--mob-filter_button")
             var filterCloseButton = $(".prep-sol--filter_close")
@@ -1751,9 +1758,7 @@
             mobFilterButton.on("click", function() {
                 filter.css("display", "block")
                 $("body").css("overflow-y", "hidden")
-                setTimeout(function() {
-                    filter.addClass("prep-sol--filter__active")
-                }, 100)
+                setScrolls()
             })
 
             filterCloseButton.on("click", function () {

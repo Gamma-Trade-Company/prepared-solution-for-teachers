@@ -393,7 +393,6 @@ body {
 
 .prep-sol--scroll__filter-block {
   max-height: 250px;
-  border: 1px solid #00000000;
 }
 
 .prep-sol--scroll_area {
@@ -417,7 +416,6 @@ body {
 
 .prep-sol--scroll-bar_button {
   width: 5px;
-  height: 150px;
   border-radius: 2.5px;
   background-color: #A32B25;
   cursor: pointer;
